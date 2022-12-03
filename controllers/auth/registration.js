@@ -9,7 +9,7 @@ const registration = async (req, res) => {
   if (error) {
     throw createError(400, "Email or password invalid");
   }
-  const { email, password } = req.body;
+  const { email, password, name, checkbox } = req.body;
   const result = await User.findOne({ email });
   if (result) {
     throw createError(409, "Email already exist");
@@ -18,7 +18,9 @@ const registration = async (req, res) => {
   const avatarURL = gravatar.url(email);
   const verificationToken = v4();
   await User.create({
+    name,
     email,
+    checkbox,
     password: hashPassword,
     verificationToken,
     avatarURL,
@@ -31,7 +33,9 @@ const registration = async (req, res) => {
   await sendMail(mail);
   res.status(201).json({
     user: {
+      name,
       email,
+      checkbox,
       subscription: "starter",
     },
   });

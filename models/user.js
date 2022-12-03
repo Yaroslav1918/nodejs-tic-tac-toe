@@ -6,6 +6,10 @@ const emailRegexp =
 
 const userSchema = Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -33,13 +37,19 @@ const userSchema = Schema(
       type: String,
       required: [true, "Verify token is required"],
     },
+    checkbox: {
+      type: Boolean,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 const signupJoiSchema = Joi.object({
+  name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+  checkbox: Joi.boolean().required(),
 });
 
 const schemas = {
